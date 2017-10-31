@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Depends on: 
+description="judy (sparse dynamic array library)"
+packager="cdrw"
+url="https://sourceforge.net/projects/judy/"
+
+name=judy
+version=1.0.5
+release=1
+
+source=(${url}/files/Judy-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure --prefix=/usr        \
+                    --sysconfdir=/etc    \
+                    --localstatedir=/var \
+                    --disable-static
+        make -j1
+        make DESTDIR=$PKG install
+
+}

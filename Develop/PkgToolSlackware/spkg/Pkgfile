@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Depends on: judy glib popt zlib
+description="spkg (The Unofficial Slackware Linux Package Manager)"
+packager="cdrw"
+url="https://github.com/megous/spkg"
+
+name=spkg
+version=1.1
+release=1
+
+source=(${url}/archive/$version.tar.gz
+	https://gist.githubusercontent.com/ruario/9672717/raw/765331537bb573ee1702f7837ec37ab855f66b54/fmakepkg.sh
+	https://gist.githubusercontent.com/ruario/9672717/raw/765331537bb573ee1702f7837ec37ab855f66b54/mkpkg.sh)
+
+build() {
+
+        cd $name-$version
+
+        CFLAGS="$SLKCFLAGS"                             \
+        CXXFLAGS="$SLKCFLAGS"                           \
+        ./autogen.sh                                    \
+                   --prefix=/usr                        \
+                   --libdir=/usr/lib                    \
+                   --sysconfdir=/etc                    \
+                   --localstatedir=/var                 \
+                   --mandir=/usr/share/man              \
+                   --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+	install -Dm755 ../fmakepkg.sh "${PKG}/usr/bin/fmakepkg"
+	install -Dm755 ../mkpkg.sh    "${PKG}/usr/bin/mkpkg"
+
+}
