@@ -1,0 +1,13 @@
+#!/bin/bash
+mkdir -p compiz
+mkdir -p compiz-bcop
+mkdir -p protobuf
+mkdir -p libcompizconfig
+mkdir -p compizconfig-python
+mkdir -p ccsm
+mkdir -p compiz-plugins-main
+mkdir -p compiz-plugins-extra
+mkdir -p compiz-plugins-experimental
+mkdir -p emerald
+mkdir -p emerald-themes
+mkdir -p fusion-icon

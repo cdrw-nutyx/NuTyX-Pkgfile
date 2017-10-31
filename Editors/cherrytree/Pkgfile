@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Depends on: python2 python2-gtksourceview2 python2-pyenchant dbus-python p7zip desktop-file-utils
+Description="Hierarchical note taking application featuring rich text and syntax highlighting"
+url="http://www.giuspen.com/cherrytree/"
+Packager="cdrw"
+
+name=cherrytree
+version=0.38.2
+release=1
+group=
+source=(http://www.giuspen.com/software/$name-$version.tar.xz)
+build() {
+    cd $name-$version
+
+    python2 setup.py build
+    python2 setup.py install --root="$PKG" --optimize=1
+}

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Depends on: glibc bzip2 libnatspec
+description="Creates PKZIP-compatible .zip files for non-latin filenames, using libnatspec patch from AltLinux."
+packager="cdrw"
+url="http://www.info-zip.org/pub/infozip/Zip.html"
+
+name=zip
+version=3.0
+release=1
+
+source=(http://downloads.sourceforge.net/infozip/zip30.tar.gz
+        https://www.opennet.ru/soft/zip_rus/zip30-natspec-asdos-mod.diff.gz)
+
+build() {
+
+        cd ${name}${version/./}
+        zcat ../zip30-natspec-asdos-mod.diff.gz | patch -p1 || exit 1
+
+        make -f unix/Makefile prefix=/usr generic_gcc 
+        make prefix=$PKG/usr MANDIR=$PKG/usr/share/man/man1 -f unix/Makefile install
+
+}

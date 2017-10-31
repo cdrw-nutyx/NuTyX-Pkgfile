@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Depends on: xorg-libx11 compiz
+description="libcompizconfig (A configuration library for Compiz Fusion)"
+packager="cdrw"
+url="https://github.com/raveit65/libcompizconfig"
+
+name=libcompizconfig
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/libcompizconfig/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --localstatedir=/var    \
+                    --enable-static=no      \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

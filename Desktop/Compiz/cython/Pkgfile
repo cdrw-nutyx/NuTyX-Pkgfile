@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Depends on: python python2 python2-setuptools python-setuptools
+
+description="C extensions for Python."
+url="http://www.cython.org/"
+packager="berlius at nutyx dot com, tnut at nutyx dot org, Sipo"
+
+name=cython
+version=0.25.2
+release=1
+source=(https://pypi.python.org/packages/b7/67/7e2a817f9e9c773ee3995c1e15204f5d01c8da71882016cac10342ef031b/Cython-$version.tar.gz)
+
+build() {
+	cd Cython-$version
+	/usr/bin/python setup.py install --root $PKG
+	/usr/bin/python3 setup.py install --root $PKG
+}

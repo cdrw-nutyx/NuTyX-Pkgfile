@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Depends on: unzip
+description="arj (free software implementation of arj archiver)"
+packager="cdrw"
+url="http://arj.sourceforge.net/"
+CWD=`pwd`
+name=arj
+version=3.10.22
+release=1
+source=(${url}/files/$name-$version.tar.gz)
+
+build() {
+        unzip $CWD/arj_patches.zip -d $SRC
+
+        cd $name-$version
+
+        for i in $( cat ../series ); do
+           patch -p1 < ../$i
+        done
+
+        cd gnu
+        cp $( ls /usr/share/automake-*/config.sub | head -1 ) .
+        autoreconf -if || true
+
+        ./configure                        \
+                   --prefix=/usr           \
+                   --libdir=/usr/lib       \
+                   --sysconfdir=/etc       \
+                   --localstatedir=/var    \
+                   --mandir=/usr/share/man \
+                   --docdir=/usr/share/doc/$name-$version
+        cd -
+
+        make BUILD_STRIP=1
+        make DESTDIR=$PKG install
+}

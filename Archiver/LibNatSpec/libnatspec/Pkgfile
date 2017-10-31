@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Depends on: popt tcl python
+Description="Library for national and language-specific issues"
+url="https://github.com/vitlav/libnatspec"
+Packager="cdrw"
+
+name=libnatspec
+version=0.3.1
+release=1
+source=(https://github.com/vitlav/libnatspec/archive/$version-alt2.tar.gz)
+
+build() {
+        cd $name-$version-alt2
+        autoreconf -fiv
+        ./configure                                   \
+               --prefix=/usr                          \
+               --sysconfdir=/etc                      \
+               --libdir=/usr/lib                      \
+               --localstatedir=/var                   \
+               --mandir=/usr/share/man                \
+               --infodir=/usr/share/info              \
+               --docdir=/usr/share/doc/$name-$version \
+               --with-python        
+        make
+        make DESTDIR=$PKG install
+}

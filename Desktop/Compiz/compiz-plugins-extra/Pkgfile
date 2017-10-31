@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Depends on: ccsm compiz-bcop
+description="compiz-plugins-extra (Extra plugins for Compiz Fusion)"
+packager="cdrw"
+url="https://github.com/raveit65/compiz-plugins-extra"
+
+name=compiz-plugins-extra
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/$name/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --localstatedir=/var    \
+                    --enable-static=no      \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

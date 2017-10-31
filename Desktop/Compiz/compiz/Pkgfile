@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Depends on: gtk3 cairo xorg-glu libjpeg-turbo libxslt startup-notification
+Description="compiz (OpenGL compositing manager)"
+url="https://github.com/raveit65/compiz"
+Packager="cdrw"
+
+name=compiz
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/compiz/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure                                       \
+                   --prefix=/usr                          \
+                   --libdir=/usr/lib                      \
+                   --sysconfdir=/etc                      \
+                   --localstatedir=/var                   \
+                   --mandir=/usr/share/man                \
+                   --with-gtk=3.0                         \
+                   --docdir=/usr/share/doc/$name-$version \
+                   --enable-static=no
+
+        make 
+        make install DESTDIR=$PKG
+
+}

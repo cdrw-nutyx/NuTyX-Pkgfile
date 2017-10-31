@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#Depends on: 
+Description="Viber (mobile application)"
+url="https://www.viber.com/ru/products/linux"
+Packager="cdrw"
+
+name=viber
+version=6.5.5
+release=1
+source=(http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb)
+
+build() {
+
+        cd $PKG
+        ar p $SRC/viber.deb data.tar.xz | tar xJv || exit 1
+
+        chmod 0755 .
+        mkdir -p $PKG/usr/bin
+        ( cd $PKG/opt/viber/translations/; find . -type f -not -name "*_ru.qm" -not -name "ru.pak" -print0 |xargs -0 rm )
+
+}

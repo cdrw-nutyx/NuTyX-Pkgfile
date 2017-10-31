@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Depends on:  libwnck3 ccsm
+description="emerald (Emerald Window Decorator)"
+packager="cdrw"
+url="https://github.com/raveit65/emerald"
+
+name=emerald
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/$name/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --localstatedir=/var    \
+                    --mandir=/usr/share/man \
+                    --enable-static=no      \
+                    --with-gtk=3.0          \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

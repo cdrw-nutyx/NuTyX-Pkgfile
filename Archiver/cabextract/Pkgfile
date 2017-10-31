@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Depends on:
+description="cabextract (Extract Microsoft cabinet files)"
+packager="cdrw"
+url="http://www.cabextract.org.uk/"
+
+name=cabextract
+version=1.6
+release=1
+
+source=(${url}/$name-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --localstatedir=/var    \
+                    --mandir=/usr/share/man \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

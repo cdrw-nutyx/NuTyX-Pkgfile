@@ -1,0 +1,171 @@
+#!/bin/bash
+
+mkdir -p /mnt/hd/usr/ports/perso/libtranscript
+echo '#!/bin/bash
+
+#Depends on:
+description="libtranscript (character-set conversion library)"
+packager="cdrw"
+url="http://os.ghalkes.nl/libtranscript.html"
+
+name=libtranscript
+version=0.3.2
+release=1
+source=(http://os.ghalkes.nl/dist//$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version \
+           --disable-debug
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libtranscript/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/libt3config
+echo '#!/bin/bash
+
+#Depends on:
+description="libt3config (A library for reading and writing configuration files)"
+packager="cdrw"
+url="http://os.ghalkes.nl/t3/libt3config.html"
+
+name=libt3config
+version=0.2.10
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --docdir=/usr/share/doc/$name-$version
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libt3config/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/libt3window
+echo '#!/bin/bash
+
+#Depends on: ncurses libunistring libtranscript
+description="libt3window (CRT screen handling and optimization package)"
+packager="cdrw"
+url="http://os.ghalkes.nl/t3/libt3config.html"
+
+name=libt3window
+version=0.2.3
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version \
+           --disable-debug
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libt3window/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/libt3key
+echo '#!/bin/bash
+
+#Depends on: libt3config libxcb ncurses
+description="libt3key (library provides functions for retrieving the character)"
+packager="cdrw"
+url="http://os.ghalkes.nl/t3/libt3key.html"
+
+name=libt3key
+version=0.2.6
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libt3key/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/libt3highlight
+echo '#!/bin/bash
+
+#Depends on: libt3config pcre
+description="libt3highlight (library provides functions for syntax-highlighting)"
+packager="cdrw"
+url="http://os.ghalkes.nl/t3/libt3highlight.html"
+
+name=libt3highlight
+version=0.4.2
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libt3highlight/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/libt3widget
+echo '#!/bin/bash
+
+#Depends on: pcre libsigc++ libt3key libxcb libunistring libt3window libtranscript
+description="libt3widget (library provides a C++ dialog toolkit)"
+packager="cdrw"
+url="http://os.ghalkes.nl/t3/libt3key.html"
+
+name=libt3widget
+version=0.5.2
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/libt3widget/Pkgfile
+
+mkdir -p /mnt/hd/usr/ports/perso/tilde
+echo '#!/bin/bash
+
+#Depends on: libt3config libt3highlight libt3widget libt3window libunistring libtranscript
+description="tilde (text editor for the console/terminal)"
+packager="cdrw"
+url="http://os.ghalkes.nl/tilde/index.html"
+
+name=tilde
+version=0.3.7
+release=1
+source=(http://os.ghalkes.nl/dist/$name-$version.tar.bz2)
+
+build() {
+   cd $name-$version
+   ./configure                                    \
+           --prefix=/usr                          \
+           --libdir=/usr/lib                      \
+           --mandir=/usr/share/man                \
+           --docdir=/usr/share/doc/$name-$version
+   make
+   make DESTDIR=$PKG install
+}' > /mnt/hd/usr/ports/perso/tilde/Pkgfile
+

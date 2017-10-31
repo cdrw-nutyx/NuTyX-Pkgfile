@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Depends on: libnatspec bzip2
+Description="Unpacks .zip archives such as those made by PKZIP"
+url="http://www.info-zip.org"
+Packager="cdrw"
+
+name=unzip
+version=6.0
+release=1
+
+source=(http://downloads.sourceforge.net/infozip/unzip60.tar.gz
+        http://slackware.org.uk/slackware/slackware-current/source/a/infozip/unzip.git.archive.fix.diff.gz
+        http://slackware.org.uk/slackware/slackware-current/source/a/infozip/unzip.process.c.diff.gz
+        http://slackware.org.uk/slackware/slackware-current/source/a/infozip/unzip.use.system.libbz2.diff.gz
+        http://www.opennet.ru/soft/zip_rus/unzip60-natspec-mod.diff.gz)
+
+build() {
+	cd $name${version/./}
+
+        zcat ../unzip60-natspec-mod.diff.gz | patch -p1 || exit 1
+        zcat ../unzip.use.system.libbz2.diff.gz | patch -p1 --verbose || exit 1
+        zcat ../unzip.process.c.diff.gz | patch -p1 --verbose || exit 1
+        zcat ../unzip.git.archive.fix.diff.gz | patch -p0 --verbose || exit 1
+
+        export CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=64 \
+	                       -DACORN_FTYPE_NFS      \
+                               -DWILD_STOP_AT_DIR     \
+			       -DLARGE_FILE_SUPPORT   \
+			       -DUNICODE_SUPPORT      \
+                               -DUNICODE_WCHAR        \
+			       -DUTF8_MAYBE_NATIVE    \
+			       -DNO_LCHMOD            \
+			       -DDATE_FORMAT=DF_YMD   \
+                               -DUSE_BZIP2 -DNATIVE   \
+			       -DNOMEMCPY -DNO_SETLOCALE"
+
+        make -f unix/Makefile LOCAL_UNZIP="$CFLAGS" prefix=/usr \
+                D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 unzips || return 1
+	make -f unix/Makefile prefix=$PKG/usr INSTALL_PROGRAM="install" install || return 1
+	mkdir -p $PKG/usr/share || return 1
+	mv $PKG/usr/man $PKG/usr/share/ || return 1
+}

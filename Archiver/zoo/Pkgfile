@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Depends on:
+description="zoo (archiving and compressing utility)"
+packager="cdrw"
+url="https://en.wikipedia.org/wiki/Zoo_(file_format)"
+
+name=zoo
+version=2.10
+release=1
+
+source=(http://slackware.uk/slackware/slackware64-current/source/a/zoo/zoo-2.10.tar.gz
+        http://slackware.uk/slackware/slackware64-current/source/a/zoo/zoo_2.10-22.debian.tar.gz)
+
+build() {
+
+        cd $name-$version
+
+        make clean || return 1
+
+        for diff in $SRC/debian/patches/*patch; do
+          cat $diff | patch -p1 --verbose --backup --suffix=.orig || return 1
+        done
+
+        make linux || return 1
+
+        for file in zoo fiz; do
+          install -Dm755 ${name} "${PKG}/usr/bin/${name}"
+          install -Dm644 ${name}.1 "${PKG}/usr/share/man/man1/${name}.1"
+        done
+}

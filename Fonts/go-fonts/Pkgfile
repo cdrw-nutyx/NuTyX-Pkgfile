@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Depends on:
+Description="The font family, called Go, proportional and fixed-width faces in normal, bold, and italic renderings."
+url="https://blog.golang.org/go-fonts"
+Packager="cdrw"
+
+name=go-fonts
+version=1.0
+release=1
+
+echo 'fc-cache -fv /usr/share/fonts/go-fonts
+' > go-fonts.post-install
+
+build() {
+
+        cd $SRC
+        git clone https://go.googlesource.com/image
+        cd $SRC/image/font/gofont/ttfs
+        install -v -d -m755 $PKG/usr/share/fontconfig/conf.avail
+        install -v -d -m755 $PKG/etc/fonts/conf.d
+        install -v -d -m755 $PKG/usr/share/fonts/go-fonts
+        install -v -m644 *.ttf $PKG/usr/share/fonts/go-fonts/
+
+echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "../fonts.dtd">
+<fontconfig>
+         <!-- Microsoft -->
+        <alias binding="same">
+          <family>Cambria</family>
+            <accept>
+              <family>Go</family>
+            </accept>
+        </alias>
+        <alias binding="same">
+          <family>Go</family>
+            <default>
+              <family>Cambria</family>
+            </default>
+        </alias>
+</fontconfig>
+' > $PKG/usr/share/fontconfig/conf.avail/33-go-fonts-fontconfig.conf
+
+echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "../fonts.dtd">
+<fontconfig>
+        <alias>
+          <family>serif</family>
+            <prefer>
+              <family>Go</family>
+            </prefer>
+        </alias>
+        <alias>
+          <family>Go</family>
+            <default>
+              <family>serif</family>
+            </default>
+        </alias>
+</fontconfig>
+' > $PKG/usr/share/fontconfig/conf.avail/63-go-fonts-fontconfig.conf
+
+        ( cd $PKG/etc/fonts/conf.d ; ln -sf /usr/share/fontconfig/conf.avail/33-go-fonts-fontconfig.conf . )
+        ( cd $PKG/etc/fonts/conf.d ; ln -sf /usr/share/fontconfig/conf.avail/63-go-fonts-fontconfig.conf . )
+
+}

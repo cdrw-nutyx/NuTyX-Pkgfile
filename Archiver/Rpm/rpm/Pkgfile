@@ -1,0 +1,43 @@
+
+# Depends on: db48 nspr nss popt python python2
+description="rpm (RPM package format tool)"
+packager="cdrw"
+url="http://www.nano-editor.org/"
+
+name=rpm
+version=4.13.0.1
+release=1
+
+DB_INC="/usr/include/db48"
+
+source=(http://slackware.uk/slackware/slackware64-current/source/ap/rpm/rpm-4.13.0.1.tar.xz)
+
+build() {
+
+        cd $name-$version
+	CFLAGS="$SLKCFLAGS -I${DB_INC}     \
+	$(pkg-config --cflags nspr nss)"   \
+        LDFLAGS="-ldl"                     \
+        ./configure                        \
+                   --prefix=/usr           \
+                   --libdir=/usr/lib       \
+                   --localstatedir=/var    \
+                   --mandir=/usr/share/man \
+                   --enable-python         \
+                   --with-external-db      \
+                   --enable-broken-chown   \
+                   --without-hackingdocs   \
+                   --without-selinux       \
+                   --without-lua           \
+                   --without-dmalloc       \
+                   --enable-sqlite3 
+
+        make
+        make DESTDIR=$PKG install
+	
+        cd python
+           python setup.py install --root=$PKG || exit 1
+           python3 setup.py install --root=$PKG || exit 1
+        cd -
+
+}

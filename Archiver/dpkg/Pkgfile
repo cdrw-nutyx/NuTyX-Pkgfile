@@ -1,0 +1,30 @@
+#!/bin/sh
+
+#Depends on: 
+Description="dpkg (Debian package management system)"
+url="https://wiki.debian.org/Teams/Dpkg"
+Packager="cdrw"
+
+name=dpkg
+version=1.18.24
+release=1
+source=(http://snapshot.debian.org/archive/debian/20170610T213933Z/pool/main/d/$name/${name}_${version}.tar.xz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure                                         \
+                   --prefix=/usr                            \
+                   --libdir=/usr/lib                        \
+                   --sysconfdir=/etc                        \
+                   --localstatedir=/var                     \
+                   --mandir=/usr/share/man                  \
+                   --docdir=/usr/share/doc/$PRGNAM-$VERSION \
+                   --disable-devel-docs                     \
+                   --disable-start-stop-daemon              \
+                   --enable-silent-rules
+         make
+         make DESTDIR=$PKG install
+
+}

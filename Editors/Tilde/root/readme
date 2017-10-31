@@ -1,0 +1,6 @@
+
+root [ ~ ]# sh ./install_tilde
+
+root [ ~ ]# cp -a inst_tilde /mnt/hd/root/
+
+chroot [ ~ ]# sh ./inst_tilde

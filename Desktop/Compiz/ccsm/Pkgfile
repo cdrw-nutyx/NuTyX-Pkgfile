@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Depends on: compizconfig-python
+description="ccsm (CompizConfig Settings Manager)"
+packager="cdrw"
+url="https://github.com/raveit65/ccsm"
+
+name=ccsm
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/ccsm/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+	
+        python setup.py install       \
+	                --prefix=/usr \
+			--root=$PKG
+
+}

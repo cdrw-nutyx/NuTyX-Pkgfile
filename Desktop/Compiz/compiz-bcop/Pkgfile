@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Depends on: compiz
+description="compiz-bcop (A BCOP code generator for Compiz Fusion)"
+packager="cdrw"
+url="https://github.com/compiz-reloaded/compiz-bcop"
+
+name=compiz-bcop
+version=0.8.14
+release=1
+
+source=(https://github.com/compiz-reloaded/compiz-bcop/releases/download/v0.8.14/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --localstatedir=/var    \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

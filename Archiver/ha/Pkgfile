@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Depends on: unzip cmake
+description="ha Compression/Decompression Utility)"
+packager="cdrw"
+url="https://github.com/pfactum/ha"
+CWD=`pwd`
+name=ha
+version=0.999c
+release=1
+
+source=
+
+build() {
+        unzip $CWD/ha_man.zip -d $SRC
+	
+	( cd $SRC; git clone https://github.com/pfactum/ha )
+
+        cd $name
+
+        cmake CMakeLists.txt
+        make
+
+        install -Dm755 $name       "${PKG}/usr/bin/$name"
+        install -Dm644 ../$name.1  "${PKG}/usr/share/man/man1/$name.1"	
+	
+}

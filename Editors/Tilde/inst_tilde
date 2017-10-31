@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cards create -r libtranscript
+cards create -r libt3config
+cards create -r libt3window
+cards create -r libt3key
+cards create -r libt3highlight
+cards create -r libt3widget
+cards create -r tilde
+
+
+

@@ -1,0 +1,103 @@
+#!/bin/sh
+
+#Depends on: imagemagick
+Description="SeaMonkey (an open-source web browser suite)"
+url="https://www.seamonkey-project.org"
+Packager="cdrw"
+
+name=seamonkey
+version=2.48
+release=1
+source=(https://download-installer.cdn.mozilla.net/pub/seamonkey/releases/2.48/contrib/seamonkey-2.48.en-US.linux-x86_64.tar.bz2)
+
+them_ic() {
+
+          D00="16x16"; D01="22x22"; D02="24x24"; D03="32x32";   D04="36x36";   D05="48x48"
+          D06="64x64"; D07="72x72"; D08="96x96"; D09="128x128"; D10="192x192"; D11="256x256"
+          CI="apps"
+
+          for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+            mkdir -p $PKG/usr/share/icons/hicolor/$p/$CI
+          done
+
+          for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+            convert $SRC/$nameprog.png -resize $p                 \
+                    $PKG/usr/share/icons/hicolor/$p/$CI/$nameprog.png
+          done
+}
+
+build()  {
+
+         cd $PKG
+         install -v -d -m755 $PKG/usr/bin
+         install -v -d -m755 $PKG/usr/lib
+         install -v -d -m755 $PKG/usr/share/applications
+         mv $SRC/$name $PKG/usr/lib
+         ( cd $PKG/usr/bin; ln -sf /usr/lib/seamonkey/seamonkey . )
+
+cat > $PKG/usr/share/applications/seamonkey.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Name=SeaMonkey Browser
+GenericName=Internet suite
+GenericName[ru]=Интернет-люкс
+Comment=Web browser
+Comment[ru]=SeaMonkey универсальный браузер
+Categories=Application;Network;
+Exec=seamonkey -browser
+Terminal=false
+Encoding=UTF-8
+Icon=seamonkey
+Terminal=false
+Type=Application
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;
+EOF
+
+nameprog=seamonkey
+( cd $SRC; wget -c "https://rocketdock.com/images/screenshots/seamonkey_2.png" -O $nameprog.png )
+them_ic
+
+cat > $PKG/usr/share/applications/seamonkey-mail.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=SeaMonkey Mail
+Comment=email client
+Comment[ru]=Почтовый клиент
+Categories=Application;Network;
+Exec=seamonkey -mail
+Icon=seamonkey-mail
+Terminal=false
+StartupNotify=true
+GenericName=Internet suite
+EOF
+
+nameprog=seamonkey-mail
+( cd $SRC; wget -c "https://www.iconfinder.com/icons/6121/download/png/128" -O $nameprog.png )
+them_ic
+
+cat > $PKG/usr/share/applications/seamonkey-composer.desktop << EOF
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=SeaMonkey Composer
+GenericName=Web Browser
+GenericName[ru]=Веб-редактор
+Comment=HTML editor
+Comment[ru]=Редактор HTML
+Comment[ru]=SeaMonkey Composer кроссплатформенный WYSIWYG веб редактор
+Categories=Application;Network;
+Exec=seamonkey -edit
+Icon=seamonkey-composer
+Terminal=false
+StartupNotify=true
+GenericName=Internet suite
+EOF
+
+nameprog=seamonkey-composer
+( cd $SRC; wget -c "https://fthmb.tqn.com/ytEoHRAulCJa1_ndkODyPEFIAtQ=/400x0/kompozer-icon-56a9f52c3df78cf772abc1f3.png" -O $nameprog.png )
+them_ic
+
+}

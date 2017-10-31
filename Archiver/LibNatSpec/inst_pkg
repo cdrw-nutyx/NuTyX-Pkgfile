@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cards create -r libnatspec
+cards create -r zip
+cards create -r unzip
+cards create -r p7zip

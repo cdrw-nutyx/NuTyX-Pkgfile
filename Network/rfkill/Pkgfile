@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Depends on:
+
+description="rfkill (tool to query subsystem interfaces)"
+packager="cdrw"
+url="http://linuxwireless.org/en/users/Documentation/rfkill"
+
+name=rfkill
+version=0.5
+release=1
+source=(https://www.kernel.org/pub/software/network/$name/$name-$version.tar.xz)
+
+build() {
+   cd $name-$version
+
+   make                      \
+       PREFIX=/usr           \
+       MANDIR=/usr/share/man || exit 1
+   make install              \
+       PREFIX=/usr           \
+       MANDIR=/usr/share/man \
+       DESTDIR=$PKG || exit 1
+
+}

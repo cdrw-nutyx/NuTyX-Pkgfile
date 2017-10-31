@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Depends on: intltool gtk3 webkitgtk3
+description="yad (displays graphical dialogs from shell scripts or command line)"
+packager="cdrw"
+url="http://sourceforge.net/projects/yad-dialog"
+
+name=yad
+version=0.39.0
+release=1
+
+source=(${url}/files/${name}-${version}.tar.xz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr                          \
+                    --sysconfdir=/etc                      \
+                    --localstatedir=/var                   \
+                    --mandir=/usr/share/man                \
+                    --docdir=/usr/share/doc/$name-$version \
+                    --with-gtk=gtk3                        \
+                    --enable-icon-browser                  \
+                    --enable-html
+        make
+        make DESTDIR=$PKG install
+
+}

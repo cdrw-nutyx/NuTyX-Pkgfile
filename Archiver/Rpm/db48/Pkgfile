@@ -1,0 +1,69 @@
+
+# Depends on: tcl
+description="db4 (Berkeley database library version 4.8.x)"
+packager="cdrw"
+url="https://www.oracle.com/database/berkeley-db/db.html"
+
+name=db48
+version=4.8.30
+release=1
+
+source=(http://slackware.uk/slackware/slackware64-current/source/l/db48/db-4.8.30.tar.xz)
+
+build() {
+
+        cd db-$version
+	
+	rm -rf build-dir
+	mkdir build-dir
+	cd build-dir
+	
+	../dist/configure                   \
+	                 --prefix=/usr      \
+	                 --enable-shared    \
+	                 --enable-cxx       \
+	                 --enable-compat185 \
+                         --disable-test
+        make
+        make -i DESTDIR=$PKG install
+	
+	# Move include files:
+      ( cd $PKG/usr/include
+        mkdir $name
+        mv *.h $name
+        for file in $name/* ; do
+          ln -sf $file .
+        done
+      )
+      
+        mkdir -p $PKG/lib
+        mv $PKG/usr/lib/libdb-4.8.so $PKG/lib/libdb-4.8.so
+	
+      ( cd $PKG/usr/lib
+        ln -sf /lib/libdb-4.8.so .
+      )
+      
+      ( cd $PKG/usr/lib
+        ln -sf libdb-4.8.a libdb-4.a
+        ln -sf libdb-4.8.a libdb4.a
+        ln -sf libdb-4.8.a libdb.a
+        ln -sf libdb_cxx-4.8.a libdb_cxx-4.a
+        ln -sf libdb_cxx-4.8.a libdb_cxx.a
+        ln -sf libdb-4.8.so libdb4.so
+        ln -sf libdb-4.8.so libdb.so
+      )
+      
+        mkdir -p $PKG/usr/share/doc/db-$version
+	
+cat << EOF > $PKG/usr/share/doc/db-$version/README-DOCS
+
+  For a ton of additional documentation (too large to include
+  here) on writing source code that uses libdb$PKGNAM, please see
+  the original source tarball db-$VERSION.tar.xz, which can be found
+  on Oracle's web site:
+
+  http://www.oracle.com/technetwork/products/berkeleydb/overview/index.html
+
+EOF
+
+}

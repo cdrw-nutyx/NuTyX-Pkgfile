@@ -1,0 +1,63 @@
+#!/bin/sh
+
+#Depends on: imagemagick gconf
+Description="google-chrome internet brouser."
+url=https://google.ru
+Packager=cdrw
+
+name=google-chrome
+version=62.0.3202.62
+release=1
+source=(https://dl-ssl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
+
+build() {
+
+        cd $PKG
+        ar p $SRC/google-chrome-stable_current_amd64.deb data.tar.xz | tar xJv || exit 1
+
+        chmod 0755 .
+        chmod 4711 opt/google/chrome/chrome-sandbox
+        rm -rf etc
+        sed -i 's,libnss3.so.1d,libnss3.so\x00\x00\x00,g;
+                s,libnssutil3.so.1d,libnssutil3.so\x00\x00\x00,g;
+                s,libsmime3.so.1d,libsmime3.so\x00\x00\x00,g;
+                s,libssl3.so.1d,libssl3.so\x00\x00\x00,g;
+                s,libplds4.so.0d,libplds4.so\x00\x00\x00,g;
+                s,libplc4.so.0d,libplc4.so\x00\x00\x00,g;
+                s,libnspr4.so.0d,libnspr4.so\x00\x00\x00,g;' opt/google/chrome/chrome
+
+       ( cd $PKG/opt/google/chrome/locales/; find . -type f -not -name "ru.pak" -print0 |xargs -0 rm )
+
+       find $PKG/usr/share/man -type f -exec gzip -9 {} \;
+       for i in $( find $PKG/usr/share/man -type l ) ; do
+         ln -s $( readlink $i ).gz $i.gz
+         rm $i
+       done
+
+       cat $PKG/opt/google/chrome/product_logo_256.png > $SRC/unnamed.png
+       rm $PKG/opt/google/chrome/*.png
+
+       D00="16x16"
+       D01="22x22"
+       D02="24x24"
+       D03="32x32"
+       D04="36x36"
+       D05="48x48"
+       D06="64x64"
+       D07="72x72"
+       D08="96x96"
+       D09="128x128"
+       D10="192x192"
+       D11="256x256"
+       CI="apps"
+
+       for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+         mkdir -p $PKG/usr/share/icons/hicolor/$p/$CI
+       done
+
+       for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+         convert $SRC/unnamed.png -resize $p \
+                 $PKG/usr/share/icons/hicolor/$p/$CI/$name.png
+       done
+
+}

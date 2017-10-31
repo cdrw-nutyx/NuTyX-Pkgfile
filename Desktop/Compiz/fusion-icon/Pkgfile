@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Depends on: ccsm python-qt4 sig
+description="fusion-icon (A system tray tool for Compiz Fusion)"
+packager="cdrw"
+url="https://github.com/raveit65/fusion-icon"
+
+name=fusion-icon
+version=0.2.4
+release=1
+
+source=(https://github.com/compiz-reloaded/$name/releases/download/v0.2.4/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        python setup.py build install        \
+                              --prefix=/usr  \
+                              --with-qt=4.0  \
+                              --with-gtk=2.0 \
+                              --root=$PKG
+}

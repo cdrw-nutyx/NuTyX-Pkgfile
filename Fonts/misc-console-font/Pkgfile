@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#Depends on:
+Description="Monospace bitmap font (for X11 and console)"
+url=http://www.xorg.net
+Packager=cdrw
+
+name=misc-console-font
+version=0.3
+release=1
+
+echo 'fc-cache -fv /usr/share/fonts/misc
+' > misc-console-font.post-install
+
+build(){
+        cd $PKG
+
+        install -v -d -m755 $PKG/etc/fonts/conf.d
+        install -v -d -m755 $PKG/usr/share/fontconfig/conf.avail
+        install -v -d -m755 $PKG/usr/share/fonts/misc/
+
+        cd $PKG/usr/share/fonts/misc/
+        wget -c ftp://213.85.246.177/pub/FreeBSD/ports/x11/kdebase3/work/kdebase-3.5.10/konsole/fonts/console8x16.pcf.gz
+
+# install fontconfig files
+echo '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "../fonts.dtd">
+<fontconfig>
+        <alias>
+         <family>monospace</family>
+          <prefer>
+           <family>Console</family>
+          </prefer>
+        </alias>
+        <alias>
+         <family>Console</family>
+         <default>
+          <family>monospace</family>
+         </default>
+        </alias>
+</fontconfig>
+' > $PKG/usr/share/fontconfig/conf.avail/63-font-misc-console-font.conf
+
+       ( cd $PKG/etc/fonts/conf.d ; ln -sf /usr/share/fontconfig/conf.avail/63-font-misc-console-font.conf . )
+}

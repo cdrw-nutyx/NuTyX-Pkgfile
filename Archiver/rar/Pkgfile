@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Depends on: wget
+description="rar (A command-line port of the rar compression utility)"
+packager="cdrw"
+url="https://www.rarlab.com"
+
+name=rar
+version=5.5.0
+release=1
+
+source=(${url}/$name/rarlinux-x64-$version.tar.gz)
+
+build() {
+
+        cd $name
+
+        (cd $SRC; wget -c "https://aur.archlinux.org/cgit/aur.git/plain/rar.1?h=rar" -O "rar.1")
+
+        install -Dm755 rar          "${PKG}/usr/local/bin/rar"
+        install -Dm755 unrar        "${PKG}/usr/local/bin/unrar"
+        install -Dm755 default.sfx  "${PKG}/usr/local/lib/default.sfx"
+        install -Dm644 ../rar.1     "${PKG}/usr/share/man/man1/rar.1"
+        install -Dm644 rarfiles.lst "${PKG}/etc/rarfiles.lst"
+
+echo 'switches=-m5 -rr10 -ol -msjpg;mp3;avi;zip;rar;tar;gz;jpg
+RAR='-s -md1024'
+export RAR
+' > $PKG/etc/rarrc
+
+}
