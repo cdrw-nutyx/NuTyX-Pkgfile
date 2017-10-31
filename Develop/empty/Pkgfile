@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Depends on: 
+description="empty (run applications under pseudo-terminal sessions)"
+packager="cdrw"
+url="https://sourceforge.net/projects/empty/"
+
+name=empty
+version=0.6.20b
+release=1
+
+source=(${url}/files/$name-$version.tgz
+        http://ftp.de.debian.org/debian/pool/main/e/empty-expect/empty-expect_0.6.20b-1.debian.tar.xz)
+
+build() {
+
+        cd $name-$version
+	
+        for i in $( cat ../debian/patches/series ); do
+           patch -p1 < ../debian/patches/$i
+        done
+	
+        make
+        install -Dm755 empty    "${PKG}/usr/bin/$name"
+	install -Dm644 $name.1  "${PKG}/usr/share/man/man1/$name.1"
+
+}
