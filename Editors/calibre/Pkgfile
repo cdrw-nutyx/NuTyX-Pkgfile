@@ -1,0 +1,66 @@
+#!/bin/bash
+# Depends on: imagemagick python2
+description="calibre (Ebook library manager)"
+packager="cdrw"
+url="https://calibre-ebook.com"
+
+name=calibre
+version=3.11.0
+release=1
+
+#version=http://status.calibre-ebook.com/latest
+
+them_ic() {
+
+          D00="16x16"; D01="22x22"; D02="24x24"; D03="32x32";   D04="36x36";   D05="48x48"
+          D06="64x64"; D07="72x72"; D08="96x96"; D09="128x128"; D10="192x192"; D11="256x256"
+          CI="apps"
+
+          for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+            mkdir -p $PKG/usr/share/icons/hicolor/$p/$CI
+          done
+
+          for p in $D00 $D01 $D02 $D03 $D04 $D05 $D06 $D07 $D08 $D09 $D10 $D11; do
+            convert $SRC/$nameprog.png -resize $p                 \
+                    $PKG/usr/share/icons/hicolor/$p/$CI/$nameprog.png
+          done
+}
+
+build() {
+
+        install -v -d -m755 $PKG/usr/bin
+        install -v -d -m755 $PKG/usr/share/applications
+
+        wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c \
+	"import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main(install_dir='$PKG/opt', isolated=True)"
+	LD_LIBRARY_PATH="$PKG/opt/calibre/lib"                                         \
+	"$PKG/opt/calibre/bin/calibre_postinstall" --root="$PKG/usr"
+
+        for symlink in $(find "$PKG/usr/bin" -maxdepth 1 -type l)
+        do
+          (
+            cd "$PKG/usr/bin"
+            ln -sf "/opt/calibre/$(basename "$symlink")" .
+          )
+        done
+
+cat > $PKG/usr/share/applications/calibre.desktop << EOF
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Calibre
+Name[ru]=Калибр
+Comment=An e-book library management application
+Comment[ru]=Приложение для управления библиотекой электронных книг
+Exec=calibre
+Icon=calibre
+Terminal=false
+StartupNotify=false
+Categories=Application;Office;
+EOF
+
+nameprog=calibre
+( cd $SRC; wget -c "https://raw.githubusercontent.com/KaOSx/apps/master/calibre/calibre.png" -O $nameprog.png )
+them_ic
+
+}

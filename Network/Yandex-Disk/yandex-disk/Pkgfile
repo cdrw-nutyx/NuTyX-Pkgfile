@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Depends on: 
+description="Yandex.Disk keeps your files with you at all times"
+packager="cdrw"
+url="https://disk.yandex.ru/"
+
+name=yandex-disk
+version=0.1.5.978
+release=1
+
+source=(http://repo.yandex.ru/$name/${name}_latest_amd64.deb)
+
+build() {
+
+	cd $SRC; ar vx yandex-disk_latest_amd64.deb
+        cd $PKG; tar -xzvf $SRC/data.tar.gz
+
+        rm -rf $PKG/usr/share/man/tr
+        rm -rf $PKG/usr/share/man/uk
+}
