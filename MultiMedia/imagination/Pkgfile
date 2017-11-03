@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Depends on: intltool docbook-xsl gtk2 ffmpeg sox
+description="Imagination is a lightweight and simple DVD slideshow maker in GTK+2"
+packager="cdrw"
+url="http://imagination.sourceforge.net/"
+
+name=imagination
+version=3.0
+release=1
+
+source=(http://downloads.sourceforge.net/$name/$name-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+        sed -i 's/PLUGINS_INSTALLED 0/PLUGINS_INSTALLED 1/g' src/support.h
+        LDFLAGS="-lm -lgmodule-2.0" \
+	        ./configure         \
+		           --prefix=/usr
+        make
+        make DESTDIR=$PKG install
+
+}
