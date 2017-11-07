@@ -1,0 +1,28 @@
+#!/bin/bash 
+
+# Depends on: efl xcb-util-keysyms
+description="enlightenment (a window manager and desktop shell)"
+packager="cdrw"
+url="https://www.enlightenment.org/"
+
+name=enlightenment
+version=0.22.0
+release=1
+
+source=(https://download.enlightenment.org/rel/apps/enlightenment/enlightenment-0.22.0.tar.xz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure --prefix=/usr           \
+                    --sysconfdir=/etc       \
+                    --libdir=/usr/lib       \
+                    --localstatedir=/var    \
+                    --mandir=/usr/share/man \
+                    --disable-static        \
+                    --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+
+}

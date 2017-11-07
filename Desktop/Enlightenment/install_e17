@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cards create -r bullet
+cards create -r luajit
+cards create -r efl
+cards create -r enlightenment

@@ -1,0 +1,30 @@
+#!/bin/bash 
+
+# Depends on: bullet luajit glib gstreamer1 xorg-fontconfig fribidi xorg-libxrender giflib poppler libspectre libraw librsvg pulseaudio xorg-libxscrnsaver gstreamer1-plugins-base
+description="efl (graphics library)"
+packager="cdrw"
+url="http://www.enlightenment.org"
+
+name=efl
+version=1.20.5
+release=1
+
+source=(http://download.enlightenment.org/rel/libs/$name/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure                                       \
+                   --prefix=/usr                          \
+                   --libdir=/usr/lib                      \
+                   --sysconfdir=/etc                      \
+                   --localstatedir=/var                   \
+                   --mandir=/usr/share/man                \
+                   --docdir=/usr/share/doc/$name-$version \
+                   --disable-systemd
+
+        make
+        make DESTDIR=$PKG install
+
+}

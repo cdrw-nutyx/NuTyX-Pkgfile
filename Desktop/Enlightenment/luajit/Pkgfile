@@ -1,0 +1,39 @@
+#!/bin/bash 
+
+# Depends on: lua
+description="luajit (just-in-time compiler for Lua)"
+packager="cdrw"
+url="http://luajit.org"
+
+name=luajit
+version=2.0.5
+release=1
+
+SLKCFLAGS="-O2"
+
+source=(http://luajit.org/download/LuaJIT-2.0.5.tar.gz)
+
+build() {
+
+        cd LuaJIT-$version
+
+        CFLAGS="$SLKCFLAGS"       \
+        CXXFLAGS="$SLKCFLAGS"     \
+        make                      \
+          Q=                      \
+          PREFIX=/usr             \
+          MULTILIB=lib            \
+          INSTALL_LIB=/usr/lib    \
+          INSTALL_MAN=/usr/share/man/man1
+
+       CFLAGS="$SLKCFLAGS"        \
+       CXXFLAGS="$SLKCFLAGS"      \
+       make install               \
+         Q=                       \
+         DESTDIR=$PKG             \
+         PREFIX=/usr              \
+         MULTILIB=lib             \
+         INSTALL_LIB=$PKG/usr/lib \
+         INSTALL_MAN=$PKG/usr/share/man/man1
+
+}
