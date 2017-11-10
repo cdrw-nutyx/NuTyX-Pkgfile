@@ -1,0 +1,28 @@
+#!/bin/bash 
+
+# Depends on: wget
+description="bacon (basic converter)"
+packager="cdrw"
+url="http://www.basic-converter.org/"
+CWD=`pwd`
+
+name=bacon
+version=3.6
+release=1
+
+source=(${url}/stable/$name-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+        ./configure --prefix=/usr
+
+	make -j1
+	make DESTDIR=$PKG install
+	
+	install -Dm644 $SRC/$name-$version/syntax/geany/filetype_extensions.conf \
+	              "$PKG/usr/share/geany/filedefs/filetype_extensions.conf"
+	install -Dm644 $SRC/$name-$version/syntax/geany/filetypes.BaCon.conf     \
+	              "$PKG/usr/share/geany/filedefs/filetypes.BaCon.conf"
+
+}

@@ -1,0 +1,21 @@
+#!/bin/bash 
+
+# Depends on: bacon
+description="hug (easily build GUI's for BaCon programs)"
+packager="cdrw"
+url="http://www.basic-converter.org/hug-tutorial/BaCon_widget_Examples_Documentation.html"
+
+name=hug
+version=0.104
+release=1
+
+build() {
+
+	wget -c http://www.basic-converter.org/hug.bac
+	wget -c http://www.basic-converter.org/hug_imports.bac
+
+	bacon -p -f hug.bac
+	install -Dm755 hug.so          "${PKG}/usr/lib/hug.so"
+ 	install -Dm644 hug_imports.bac "${PKG}/usr/include/hug_imports.bac"
+
+}
