@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Depends on: openssl iproute2 lzo unzip
+description="openvpn (secure IP tunnel daemon)"
+packager="cdrw"
+url="https://openvpn.net/"
+CWD=`pwd`
+
+name=openvpn
+version=2.4.4
+release=1
+
+source=(https://swupdate.openvpn.org/community/releases/openvpn-2.4.4.tar.xz)
+
+build() {
+
+	unzip $CWD/openvpn_conf.zip -d $SRC
+
+        cd $name-$version
+
+        ./configure --prefix=/usr                          \
+		    --sysconfdir=/etc/openvpn              \
+		    --libdir=/usr/lib                      \
+		    --localstatedir=/var                   \
+		    --libdir=/usr/lib                      \
+		    --mandir=/usr/share/man                \
+		    --docdir=/usr/share/doc/$name-$version \
+		    --enable-lzo                           \
+		    --enable-iproute2                      \
+		    --disable-plugin-auth-pam
+
+	make
+	make DESTDIR=$PKG install
+
+	install -v -d -m750                  "$PKG/etc/openvpn/certs"
+	install -v -d -m750                  "$PKG/etc/openvpn/keys"
+	install -Dm644 ../$name.conf.sample  "${PKG}/etc/openvpn/$name.conf.sample"
+	install -Dm644 ../$name.conf.sample  "${PKG}/etc/openvpn/$name.conf"
+
+}

@@ -1,0 +1,26 @@
+#!/bin/bash 
+
+# Depends on: gconf intltool python2 vpnc
+description="OpenConnect (Client for Cisco's AnyConnect SSL VPN)"
+packager="cdrw"
+url="http://www.infradead.org/openconnect/"
+
+name=openconnect
+version=7.08
+release=1
+
+source=(ftp://ftp.infradead.org/pub/$name/$name-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+
+	PYTHON=/usr/bin/python2       \
+	./configure                   \
+		   --prefix=/usr      \
+      		   --sbindir=/usr/bin \
+      		   --disable-static
+	make V=0
+	make DESTDIR=$PKG install
+
+}

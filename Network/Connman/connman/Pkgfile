@@ -1,0 +1,44 @@
+#!/bin/bash 
+
+# Depends on: bluez dbus iptables gnutls glib wpa_supplicant openvpn
+description="connman (open source connection manager)"
+packager="cdrw"
+url="https://01.org/connman"
+CWD=`pwd`
+
+name=connman
+version=1.35
+release=1
+
+source=(https://www.kernel.org/pub/linux/network/$name/$name-$version.tar.xz)
+
+build() {
+
+        unzip $CWD/connman_files.zip -d $SRC
+
+        cd $name-$version
+
+	patch -p1 < ../allow_group_network.diff
+	sed -i "s|deny|allow|" plugins/connman-nmcompat.conf
+
+	CFLAGS="$SLKCFLAGS"                               \
+        CXXFLAGS="$SLKCFLAGS"                             \
+        LIBS=-lncurses                                    \
+        ./configure                                       \
+                   --prefix=/usr                          \
+                   --libdir=/usr/lib                      \
+                   --sysconfdir=/etc                      \
+                   --localstatedir=/var                   \
+                   --mandir=/usr/share/man                \
+                   --docdir=/usr/share/doc/$name-$version \
+                   --enable-nmcompat                      \
+                   --enable-polkit                        \
+                   --enable-openvpn                       \
+                   --enable-client
+
+        make
+        make DESTDIR=$PKG install
+
+	install -Dm644 ../$name     "${PKG}/etc/rc.d/init.d/$name"
+
+}

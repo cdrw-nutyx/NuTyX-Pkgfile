@@ -1,0 +1,27 @@
+#!/bin/bash 
+
+# Depends on: libgcrypt
+description="vpnc (VPN client compatible with Cisco's EasyVPN equipment)"
+packager="cdrw"
+url="https://www.unix-ag.uni-kl.de/~massar/vpnc/"
+
+name=vpnc
+version=r550
+release=1
+
+source=(http://ponce.cc/slackware/sources/repo/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+	sed -i '/^#OPENSSL/s/^#//g' Makefile
+
+	export CFLAGS="$SLKCFLAGS"        \
+	DOCDIR=/usr/share/doc/$name-$version
+
+	make PREFIX=/usr
+	make install DESTDIR=$PKG         \
+	PREFIX=/usr MANDIR=/usr/share/man \
+	DOCDIR=/usr/share/doc/$name-$version
+
+}
