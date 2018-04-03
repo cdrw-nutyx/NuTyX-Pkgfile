@@ -1,0 +1,25 @@
+#!/bin/bash 
+
+# Depends on: glibc
+description="Converts CCD/IMG CloneCD images to ISO format"
+url="http://sourceforge.net/projects/ccd2iso"
+packager="cdrw"
+
+CWD=`pwd`
+name=ccd2iso
+version=0.3
+
+source=(http://downloads.sourceforge.net/sourceforge/$name/$name-$version.tar.gz)
+
+build() {
+
+        cd $name-$version
+
+        ./configure                                       \
+                   --prefix=/usr                          \
+                   --libdir=/usr/lib                      \
+
+        make
+        make DESTDIR=$PKG install
+
+}
