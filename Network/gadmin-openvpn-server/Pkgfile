@@ -1,0 +1,34 @@
+#!/bin/bash
+description="A GTK+ graphical user interface for OpenVPN (server)"
+url="http://dalalven.dtdns.net/linux/"
+packager="cdrw"
+# Depends on: openvpn bridge-utils gksu gtk2
+
+name=gadmin-openvpn-server
+version=0.1.6
+
+source=(http://dalalven.dtdns.net/linux/gadmin-openvpn/server/$name-$version.tar.gz)
+
+build() {
+		cd $name-$version
+        # some "patching" needed
+        find . -type f -exec sed -i 's%/etc/init.d%/etc/rc.d%g;s%/usr/lib/openvpn/plugin/lib/openvpn-auth-pam.so%/usr/lib/openvpn/openvpn-auth-pam.so%g' '{}' \;
+        ./configure --prefix=/usr
+        make
+		make DESTDIR=${PKG} install sbindir=/usr/bin
+        mkdir -p ${PKG}/usr/share/applications
+
+cat > ${PKG}/usr/share/applications/gadmin-openvpn-server.desktop << EOF
+[Desktop Entry]
+Encoding=UTF-8
+Name=GAdmin OpenVPN Server
+GenericName=GAdmin OpenVPN Server
+Comment=OpenVPN Server Administration
+Exec=gksu gadmin-openvpn-server
+Icon=gadmin-openvpn-server
+Terminal=false
+Type=Application
+Categories=Application;Network;X-Red-Hat-ServerConfig;X-Red-Hat-Base;
+EOF
+
+}

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-#Depends on: 
-Description="Viber (mobile application)"
+# Depends on: 
+description="Viber (mobile application)"
 url="https://www.viber.com/ru/products/linux"
-Packager="cdrw"
+packager="cdrw"
 
 name=viber
 version=6.5.5

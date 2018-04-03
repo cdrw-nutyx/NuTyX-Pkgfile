@@ -6,9 +6,9 @@ url="https://www.seamonkey-project.org"
 Packager="cdrw"
 
 name=seamonkey
-version=2.48
+version=2.49.2
 release=1
-source=(https://download-installer.cdn.mozilla.net/pub/seamonkey/releases/2.48/contrib/seamonkey-2.48.en-US.linux-x86_64.tar.bz2)
+source=(https://download-installer.cdn.mozilla.net/pub/seamonkey/releases/2.49.2/contrib/seamonkey-2.48.en-US.linux-x86_64.tar.bz2)
 
 them_ic() {
 

@@ -1,0 +1,43 @@
+description="Midnight Commander is a text based filemanager/shell that emulates Norton Commander"
+url="https://www.midnight-commander.org/"
+packager="cdrw"
+
+# Depends on: pcre glib gpm samba gvfs slang
+
+name=mc
+version=4.8.16
+
+source=(${url}downloads/$name-$version.tar.xz)
+CWD=$(pwd)
+
+build() {
+
+	cd $name-$version
+if [ ! -x ./configure ]; then
+  ./autogen.sh
+fi
+	./configure --prefix=/usr   \
+		--enable-charset    \
+		--disable-static    \
+		--sysconfdir=/etc   \
+		--with-screen=slang \
+                --enable-extcharset \
+                --enable-netcode    \
+                --enable-background \
+                --enable-charset    \
+                --with-gpm-mouse    \
+                --with-ext2undel    \
+                --with-x=yes        \
+                --with-vfs          \
+                --enable-vfs-smb
+	make
+	
+}
+
+
+package() {
+
+	cd $name-$version
+	make DESTDIR=$PKG install
+
+}
