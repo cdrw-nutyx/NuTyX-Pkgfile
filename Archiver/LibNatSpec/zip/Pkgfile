@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Depends on: glibc bzip2 libnatspec
 description="Creates PKZIP-compatible .zip files for non-latin filenames, using libnatspec patch from AltLinux."
 packager="cdrw"
